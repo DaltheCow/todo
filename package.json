@@ -1,14 +1,22 @@
 {
-  "name": "todos",
+  "name": "todo",
   "version": "1.0.0",
-  "description": "",
+  "description": "todo list",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DaltheCow/todo.git"
+  },
+  "author": "ben blue",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DaltheCow/todo/issues"
+  },
+  "homepage": "https://github.com/DaltheCow/todo#readme",
   "dependencies": {
     "express": "^4.14.0"
   }

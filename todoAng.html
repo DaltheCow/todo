@@ -1,0 +1,37 @@
+<html ng-app="todoApp">
+    <head>
+        <meta charset="utf-8">
+        <title> To Do </title>
+        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    </head>
+    <script>
+        var todoApp = angular.module('todoApp', []);
+        todoApp.controller('listCtrl', ['$scope', function ($scope) {
+            $scope.todoArray = [];
+            var storage = localStorage.getItem('todoList');
+            if (storage)
+                $scope.todoArray = storage.split(',');
+            $scope.sendMsg = function() {
+                if ($scope.todoArray.indexOf($scope.msg) === -1 && $scope.msg.length) {
+                    $scope.todoArray.push($scope.msg);
+                    $scope.msg = "";
+                    localStorage.setItem('todoList',$scope.todoArray);
+                }
+            }
+            $scope.deleteItem = function(item) {
+                var i = $scope.todoArray.indexOf(item);
+                $scope.todoArray.splice(i,1);
+                localStorage.setItem('todoList',$scope.todoArray);
+            }
+        }])
+    </script>
+    <form ng-submit="sendMsg()">
+      <input type="text" ng-model="msg">
+      <input type="submit" value="send">
+    </form>
+    <body ng-controller="listCtrl">
+        <li ng-repeat="item in todoArray">
+            <span ng-click="deleteItem(item)">{{item}}</span>
+        </li>
+    </body>
+</html>

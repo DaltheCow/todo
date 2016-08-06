@@ -6,13 +6,35 @@
     </head>
     <script>
         var todoApp = angular.module('todoApp', []);
-        todoApp.controller('listCtrl', ['$scope', function ($scope) {
+        todoApp.controller('listCtrl', ['$scope', '$http', function ($scope, $http) {
             $scope.todoArray = [];
             var storage = localStorage.getItem('todoList');
             if (storage)
                 $scope.todoArray = storage.split(',');
+
+            $http({
+                method: 'GET',
+                url: '/api/todos'
+            }).then(function success(res) {
+                $scope.todoArray = res.data;
+            }, function err(res) {
+                console.log(res);
+            });
+
+
             $scope.sendMsg = function() {
                 if ($scope.todoArray.indexOf($scope.msg) === -1 && $scope.msg.length) {
+
+                    $http({
+                        method: 'POST',
+                        url: '/api/todos',
+                        data: {todo: $scope.msg}
+                    }).then(function success(res) {
+                        $scope.todoArray = res.data;
+                    }, function err(res) {
+                        console.log(res);
+                    });
+
                     $scope.todoArray.push($scope.msg);
                     $scope.msg = "";
                     localStorage.setItem('todoList',$scope.todoArray);
@@ -20,8 +42,15 @@
             }
             $scope.deleteItem = function(item) {
                 var i = $scope.todoArray.indexOf(item);
-                $scope.todoArray.splice(i,1);
-                localStorage.setItem('todoList',$scope.todoArray);
+                $http({
+                    method: 'DELETE',
+                    url: 'api/todos/' + i
+                }).then(function success(res) {
+                    $scope.todoArray.splice(i,1);
+                    localStorage.setItem('todoList',$scope.todoArray);
+                }, function err(res) {
+                    console.log(res);
+                });
             }
         }])
     </script>
